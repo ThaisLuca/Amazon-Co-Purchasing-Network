@@ -15,3 +15,8 @@ def load_file(filename):
 				data.append([node[0], node[1]])
 	print("Reading completed.")
 	return data
+
+
+
+
+#def load_metadata_file(filename):
