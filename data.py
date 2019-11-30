@@ -16,6 +16,7 @@ def load_file(filename):
 				node = line.split()
 				data.append([node[0], node[1]])
 	print("Reading completed.")
+	f.close()
 	return data
 
 
@@ -45,9 +46,15 @@ def load_metadata_file(filename):
 			except:
 				print("Couldn't read character in position ", i)
 			data[Id] = {'Title': title, 'Salesrank': salesrank, 'Categories': categories, 'Rating': rating}
+	f.close()
 	return data
 
 def save_dict(dictionary):
-	w = csv.writer(open("meta-data.csv", "w"))
-	for key, val in dict.items():
-    	w.writerow([key, val])
+	f = open("meta-data.txt","w")
+	f.write(str(dictionary))
+	f.close()
+
+def load_dict(filename):
+	s = open(filename, 'r').read()
+	dt = eval(s)
+	return dt
