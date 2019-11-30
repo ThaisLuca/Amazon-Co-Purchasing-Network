@@ -1,4 +1,5 @@
 
+import csv
 import os, sys
 import pandas as pd
 
@@ -45,3 +46,8 @@ def load_metadata_file(filename):
 				print("Couldn't read character in position ", i)
 			data[Id] = {'Title': title, 'Salesrank': salesrank, 'Categories': categories, 'Rating': rating}
 	return data
+
+def save_dict(dictionary):
+	w = csv.writer(open("meta-data.csv", "w"))
+	for key, val in dict.items():
+    	w.writerow([key, val])
