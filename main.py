@@ -6,17 +6,18 @@ import plot as plt
 import gc
 
 UNGRAPH_AMAZON_NETWORK = 'resources/com-amazon.ungraph.txt'
-METADATA_NETORK = 'resources/amazon-meta.txt'
+METADATA_NETORK = 'resources/meta-data.txt'
 
 gc.collect()
 
-g, vertex_with_vertex = gt.create_graph(dt.load_file(UNGRAPH_AMAZON_NETWORK))
+meta = dt.load_dict(METADATA_NETORK)
+g = gt.create_graph(dt.load_file(UNGRAPH_AMAZON_NETWORK), meta)
 g = gt.remove_artificial_vertex(vertex_with_vertex, g)
 gt.save_graph(g)
 
-g = gt.load_graph_from_file()
+#g = gt.load_graph_from_file()
 
-print("Load graph")
+#print("Load graph")
 
 d = 0
 
@@ -42,8 +43,8 @@ if d == 1:
 	#plt.plot_distribution(g.num_vertices(), degrees, "Graus", 'degrees')
 	plt.plot_ccdf(g.num_vertices(), degrees, "Graus", 'degrees')
 
-c = global_clustering(g)
-print("Global Clustering: %f DP: %f " % (c[0], c[1]))
-print("\n")
+#c = global_clustering(g)
+#print("Global Clustering: %f DP: %f " % (c[0], c[1]))
+#print("\n")
 
-gc.collect()
+#gc.collect()

@@ -52,9 +52,8 @@ def save_dict(dictionary):
 	f.close()
 
 def load_dict(filename):
+	print("Loading dict...")
 	s = open(filename, 'r').read()
 	dt = eval(s)
+	print("Dict loaded.")
 	return dt
-
-dt = load_metadata_file('amazon-meta.txt')
-save_dict(dt)
