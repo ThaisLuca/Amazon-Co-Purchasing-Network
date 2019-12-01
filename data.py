@@ -23,7 +23,7 @@ def load_file(filename):
 def load_metadata_file(filename):
 	print("Reading meta data file...")
 	data = {}
-	title=salesrank=categories=rating=None
+	title=group=salesrank=categories=rating=None
 	with open(filename, encoding="utf8") as f:
 		for line in f:
 			line = line.split()
@@ -35,6 +35,9 @@ def load_metadata_file(filename):
 					elif(line[i].startswith("title")):
 						title = ' '.join(line[i+1:len(line)])
 						break
+					elif (line[i].startswith("group")):
+						group = line[i+1]
+						break
 					elif(line[i].startswith("salesrank")):
 						salesrank = line[i+1]
 						break
@@ -45,7 +48,8 @@ def load_metadata_file(filename):
 						rating = line[i+2]
 			except:
 				print("Couldn't read character in position ", i)
-			data[Id] = {'Title': title, 'Salesrank': salesrank, 'Categories': categories, 'Rating': rating}
+			data[Id] = {'Title': title, 'Group': group, 'Salesrank': salesrank, 'Categories': categories, 'Rating': rating}
+		print(data['2'])
 	f.close()
 	return data
 
@@ -58,3 +62,6 @@ def load_dict(filename):
 	s = open(filename, 'r').read()
 	dt = eval(s)
 	return dt
+
+dt = load_metadata_file('amazon-meta.txt')
+save_dict(dt)
