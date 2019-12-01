@@ -49,7 +49,6 @@ def load_metadata_file(filename):
 			except:
 				print("Couldn't read character in position ", i)
 			data[Id] = {'Title': title, 'Group': group, 'Salesrank': salesrank, 'Categories': categories, 'Rating': rating}
-		print(data['2'])
 	f.close()
 	return data
 
