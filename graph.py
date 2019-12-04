@@ -8,9 +8,11 @@ def create_graph(data, meta):
 	g = Graph(directed=False)
 
 	#Adding properties
+	vprop_salesrank = g.new_vertex_property("salesrank")
 	vprop_rating = g.new_vertex_property("rating")
 	vprop_group = g.new_vertex_property("group")
 	vprop_categories = g.new_vertex_property("category")
+	eprop_weight = g.new_edge_property("weight")
 
 	for line in data:
 		g.add_vertex(2)

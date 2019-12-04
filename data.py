@@ -1,3 +1,4 @@
+from __future__ import division
 
 import csv
 import os, sys
@@ -15,7 +16,10 @@ def load_file(filename):
 			else:
 				node = line.split()
 				data.append([node[0], node[1]])
+			if(len(data)*2 > floor(334863/2)):
+				break
 	print("Reading completed.")
+	print(len(data)*2)
 	f.close()
 	return data
 
@@ -23,7 +27,7 @@ def load_file(filename):
 def load_metadata_file(filename):
 	print("Reading meta data file...")
 	data = {}
-	group=categories=rating=None
+	salesrank=group=categories=rating=weight=None
 	with open(filename, encoding="utf8") as f:
 		for line in f:
 			line = line.split()
