@@ -60,19 +60,41 @@ def load_metadata_file(filename):
 
 def get_similar_products(data):
 	data_s = {}
+	keys = data.keys()
 	for key in data:
 		similars = data[key]['Similar']
 		for s in similars:
 			if(s[-1] == "X"): s = s[:-1]
-			if(s > key): 
-				tupl = (key, s)
-			else: 
-				tupl = (s, key)
-			if(tupl in data_s):
-				data_s[tupl] += 1
-			else:
-				data_s[tupl] = 1
+			if(s == '0'): continue
+			if(s not in keys): continue
+			try:
+				key = int(key)
+				s = s.strip()
+				s = int(s)
+				if(s > key): 
+					tupl = (key, s)
+				else: 
+					tupl = (s, key)
+				if(tupl in data_s):
+					data_s[tupl] += 1
+				else:
+					data_s[tupl] = 1
+			except:
+				print("Couldn't class id ", s)
 	return data_s
+
+def remove_not_int_ids(data):
+	delete = []
+	for key in data:
+		try:
+			key = int(key)
+		except:
+			print("Couldn't cast item ", key)
+			delete.append(key)
+
+	for key in delete:
+		del data[key]
+	return data
 
 def save_dict(dictionary, name):
 	f = open(name,"w")
