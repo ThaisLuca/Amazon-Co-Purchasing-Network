@@ -3,26 +3,6 @@ from __future__ import division
 import csv
 import os, sys
 
-# Loads network file into a matrix
-def load_file(filename):
-	print("Reading file...")
-	data = []
-	ignored_lines = 0
-	with open(filename) as f:
-		for line in f:
-			if ignored_lines < 4:
-				ignored_lines += 1
-			else:
-				node = line.split()
-				data.append([node[0], node[1]])
-			if(len(data)*2 > floor(334863/2)):
-				break
-	print("Reading completed.")
-	print(len(data)*2)
-	f.close()
-	return data
-
-
 def load_metadata_file(filename):
 	print("Reading meta data file...")
 	data = {}
