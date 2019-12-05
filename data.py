@@ -1,6 +1,5 @@
 from __future__ import division
 
-import csv
 import os, sys
 
 def load_metadata_file(filename):
@@ -18,10 +17,20 @@ def load_metadata_file(filename):
 					elif (line[i].startswith("group")):
 						group = line[i+1]
 						break
+					elif (line[i].startswith("categories")):
+						categories = line[i+1]
+						break
 					elif(line[i].startswith("avg") and line[i+1].startswith("rating")):
 						rating = line[i+2]
 					elif(line[i].startswith("similar")):
-						similar = line[i+1:len(line)]
+						similar = []
+						_similar = line[i+1:len(line)]
+						for s in _similar:
+							try:
+								s = int(s)
+								similar.append(s)
+							except:
+								print("Couldn't cast ", s)
 						break
 			except:
 				print("Couldn't read character in position ", i)
@@ -31,7 +40,7 @@ def load_metadata_file(filename):
 				except:
 					rating = float(rating)
 			if(rating and rating >= 3):
-				data[Id] = {'Group': group, 'Rating': rating, 'Similar': similar}
+				data[Id] = {'Group': group, 'Rating': rating, 'Similar': similar, 'Categories': categories}
 	f.close()
 	return data
 
@@ -85,7 +94,7 @@ def load_dict(filename):
 	print("Dict loaded.")
 	return dt
 
-data = load_dict('meta-data.txt')
-for key in data:
-	del data[key]['Categories']
+data = remove_not_int_ids(load_metadata_file('amazon-meta.txt'))
+
+# Save for later
 save_dict(data, 'meta-data.txt')

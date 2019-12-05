@@ -19,7 +19,7 @@ if not os.path.isfile(METADATA_NETORK):
 
 	# Build dictionary containing products description like category, average rating, categories and group. Indexed by its ID.
 	# Some IDs already integer numbers, as graph-tool only accepts integer, we must remove them.
-	data = dt.remove_not_int_ids(load_metadata_file(AMAZON_META))
+	data = dt.remove_not_int_ids(dt.load_metadata_file(AMAZON_META))
 
 	# Save for later
 	dt.save_dict(data, METADATA_NETORK)
@@ -40,7 +40,7 @@ if not os.path.isfile(SIMILARITIES):
 if not os.path.isfile(UNGRAPH_AMAZON_NETWORK):
 
 	# Build network
-	meta = dt.load_dict(METADATA_NETORK)
+	graph = dt.load_dict(METADATA_NETORK)
 	g = gt.create_graph()
 
 	# TODO: terminar isso aqui
