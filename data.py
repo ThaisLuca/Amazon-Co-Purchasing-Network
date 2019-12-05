@@ -2,7 +2,6 @@ from __future__ import division
 
 import csv
 import os, sys
-import pandas as pd
 
 # Loads network file into a matrix
 def load_file(filename):
@@ -27,7 +26,7 @@ def load_file(filename):
 def load_metadata_file(filename):
 	print("Reading meta data file...")
 	data = {}
-	salesrank=group=categories=rating=weight=None
+	salesrank=group=categories=rating=similar=None
 	with open(filename, encoding="utf8") as f:
 		for line in f:
 			line = line.split()
@@ -44,14 +43,39 @@ def load_metadata_file(filename):
 						break
 					elif(line[i].startswith("avg") and line[i+1].startswith("rating")):
 						rating = line[i+2]
+					elif(line[i].startswith("similar")):
+						similar = line[i+1:len(line)]
+						break
 			except:
 				print("Couldn't read character in position ", i)
-			data[Id] = {'Group': group, 'Categories': categories, 'Rating': rating}
+			if(rating):
+				try:
+					rating = int(rating)
+				except:
+					rating = float(rating)
+			if(rating and rating <= 3):
+				data[Id] = {'Group': group, 'Categories': categories, 'Rating': rating, 'Similar': similar}
 	f.close()
 	return data
 
-def save_dict(dictionary):
-	f = open("meta-data.txt","w")
+def get_similar_products(data):
+	data_s = {}
+	for key in data:
+		similars = data[key]['Similar']
+		for s in similars:
+			if(s[-1] == "X"): s = s[:-1]
+			if(s > key): 
+				tupl = (key, s)
+			else: 
+				tupl = (s, key)
+			if(tupl in data_s):
+				data_s[tupl] += 1
+			else:
+				data_s[tupl] = 1
+	return data_s
+
+def save_dict(dictionary, name):
+	f = open(name,"w")
 	f.write(str(dictionary))
 	f.close()
 
