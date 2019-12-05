@@ -38,9 +38,6 @@ def load_metadata_file(filename):
 					elif (line[i].startswith("group")):
 						group = line[i+1]
 						break
-					elif(line[i].startswith("categories")):
-						categories = line[i+1]
-						break
 					elif(line[i].startswith("avg") and line[i+1].startswith("rating")):
 						rating = line[i+2]
 					elif(line[i].startswith("similar")):
@@ -54,7 +51,7 @@ def load_metadata_file(filename):
 				except:
 					rating = float(rating)
 			if(rating and rating >= 3):
-				data[Id] = {'Group': group, 'Categories': categories, 'Rating': rating, 'Similar': similar}
+				data[Id] = {'Group': group, 'Rating': rating, 'Similar': similar}
 	f.close()
 	return data
 
@@ -80,7 +77,7 @@ def get_similar_products(data):
 				else:
 					data_s[tupl] = 1
 			except:
-				print("Couldn't class id ", s)
+				print("Couldn't cast id ", s)
 	return data_s
 
 def remove_not_int_ids(data):
@@ -107,3 +104,8 @@ def load_dict(filename):
 	dt = eval(s)
 	print("Dict loaded.")
 	return dt
+
+data = load_dict('meta-data.txt')
+for key in data:
+	del data[key]['Categories']
+save_dict(data, 'meta-data.txt')
