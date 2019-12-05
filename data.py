@@ -53,7 +53,7 @@ def load_metadata_file(filename):
 					rating = int(rating)
 				except:
 					rating = float(rating)
-			if(rating and rating <= 3):
+			if(rating and rating >= 3):
 				data[Id] = {'Group': group, 'Categories': categories, 'Rating': rating, 'Similar': similar}
 	f.close()
 	return data
