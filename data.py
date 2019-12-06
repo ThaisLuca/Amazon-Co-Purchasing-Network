@@ -82,7 +82,7 @@ def remove_not_int_ids(data):
 		del data[key]
 	return data
 
-def save_dict(d, name):
+def save_dict(d):
 	d1 = dict(list(d.items())[len(d)//2:])
 	d2 = dict(list(d.items())[:len(d)//2])
 
@@ -101,14 +101,9 @@ def load_dict(filename):
 	print("Dict loaded.")
 	return dt
 
-def chunks(data, SIZE=2):
-	it = iter(data)
-	for i in range(0, len(data), SIZE):
-		yield {k:data[k] for k in islice(it, SIZE)}
-	return data
-
-
 data = load_metadata_file('amazon-meta.txt')
-save_dict(data, '')
+for key in data:
+	del data[key]['Similar']
+save_dict(data)
 
 #save_dict(data, 'meta-data.txt')
