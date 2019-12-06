@@ -79,8 +79,9 @@ def create_graph(file_1, file_2, similarities):
 	return g
 
 def save_graph(g):
-	g.save('amazon-ungraph.gml')
+	g.save('resource/amazon-ungraph.gml')
+	print("Graph saved in 'resources' folder in file 'amazon-ungraph.gml'.")
 
-def load_graph_from_file():
+def load_graph_from_file(filename):
 	print("Loading graph from file..")
-	return load_graph('resources/amazon-ungraph.gml')
+	return load_graph(filename)
