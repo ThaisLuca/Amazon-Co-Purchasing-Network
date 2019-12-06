@@ -94,7 +94,6 @@ def load_dict(filename):
 	print("Dict loaded.")
 	return dt
 
-data = remove_not_int_ids(load_metadata_file('amazon-meta.txt'))
 
-# Save for later
-save_dict(data, 'meta-data.txt')
+data = load_dict('meta-data_1.txt')
+print(len(data))
