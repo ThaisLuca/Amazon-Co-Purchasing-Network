@@ -1,7 +1,8 @@
 
 from graph_tool.all import *
+import gc
 
-def create_graph(data, meta):
+def create_graph(file_1, file_2, similarities):
 	SIMILAR = 'Similar'
 	RATING = 'Rating'
 	GROUP = 'Group'
@@ -11,20 +12,49 @@ def create_graph(data, meta):
 	g = Graph(directed=False)
 
 	#Adding properties
-	vprop_rating = g.new_vertex_property("rating")
-	vprop_categories = g.new_vertex_property("categories")
-	vprop_group = g.new_vertex_property("group")
-	eprop_weight = g.new_edge_property("weight")
+	vprop_rating = g.new_vertex_property("int")
+	vprop_categories = g.new_vertex_property("int")
+	vprop_group = g.new_vertex_property("object")
+	eprop_weight = g.new_edge_property("int")
 
-	for key in data:
-		g.add_vertex()
-		from_node = int(key)
+	for f in [file_1, file_2]:
+
+		s = open(f, 'r')
+		a = s.read()
+		data = eval(a)
+
+		for key in data:
+			print(key)
+			v = g.add_vertex()
+			print(g.vertex_index[v])
+
+			return
+
+			#Set properties
+			vprop_rating[v] = data[key][RATING]
+			vprop_group[v] = data[key][GROUP]
+			vprop_categories[v] = data[key][CATEGORIES]
+
+		s.close()
+		del data
+		gc.collect()
+
+	sim = open(similarities, 'r').read()
+	sim = eval(sim)
+
+	for key in sim:
+		from_node = key[0]
+		to_node = key[1]
+
 		v1 = g.vertex(from_node)
+		v2 = g.vertex(to_node)
 
-		#Set properties
-		vprop_rating[v1] = data[key][RATING]
-		vprop_group[v1] = data[key][GROUP]
-		vprop_categories[v1] = data[key][CATEGORIES]
+		e = g.add_edge(v1, v2)
+		eprop_weight[e] = sim[key]
+		print("Adicionados vertices %d e %d com peso %d" %(from_node, to_node, sim[key]))
+
+	del sim
+	gc.collect()
 			
 
 #	for line in data:

@@ -100,10 +100,3 @@ def load_dict(filename):
 	dt = eval(s)
 	print("Dict loaded.")
 	return dt
-
-data = load_metadata_file('amazon-meta.txt')
-for key in data:
-	del data[key]['Similar']
-save_dict(data)
-
-#save_dict(data, 'meta-data.txt')
