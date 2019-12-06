@@ -1,21 +1,22 @@
 from graph_tool.all import *
 import data as dt
 import graph as gt
-import pandas as pd
 import plot as plt
-import gc
+import gc, os
 
 # Files paths
 AMAZON_META = 'resources/amazon-meta.txt'
 UNGRAPH_AMAZON_NETWORK = 'resources/com-amazon.ungraph.txt'
-METADATA_NETORK = 'resources/meta-data.txt'
+METADATA_NETORK_1 = 'resources/meta-data_1.txt'
+METADATA_NETORK_2 = 'resources/meta-data_2.txt'
 SIMILARITIES = 'resources/similarities-dict.txt'
 
 gc.collect()
 
 #Pre-processing for meta-data file
 # Check if dictionary of product already exists
-if not os.path.isfile(METADATA_NETORK):
+if not os.path.isfile(METADATA_NETORK_1) and not os.path.isfile(METADATA_NETORK_2):
+	print("Metadata files not found")
 
 	# Build dictionary containing products description like category, average rating, categories and group. Indexed by its ID.
 	# Some IDs already integer numbers, as graph-tool only accepts integer, we must remove them.
@@ -23,9 +24,7 @@ if not os.path.isfile(METADATA_NETORK):
 
 	# Save for later
 	dt.save_dict(data, METADATA_NETORK)
-else:
-	# Loads dictionary containing prod
-	data = dt.load_dict(METADATA_NETORK)
+
 
 # Check if dictionary containig relantionship between products already exists
 if not os.path.isfile(SIMILARITIES):
@@ -36,22 +35,25 @@ if not os.path.isfile(SIMILARITIES):
 	# Save for later
 	dt.save_dict(sim, SIMILARITIES)
 
-# Check if ungraph file exists
-if not os.path.isfile(UNGRAPH_AMAZON_NETWORK):
+if os.path.isfile(METADATA_NETORK_1) and os.path.isfile(METADATA_NETORK_2):
+	print("Metadata files found")
 
-	# Build network
-	graph = dt.load_dict(METADATA_NETORK)
-	g = gt.create_graph()
+	# Check if ungraph file exists
+	if not os.path.isfile(UNGRAPH_AMAZON_NETWORK):
 
-	# TODO: terminar isso aqui
-meta = dt.load_dict(METADATA_NETORK)
-g = gt.create_graph(dt.load_file(UNGRAPH_AMAZON_NETWORK), meta)
-g = gt.remove_artificial_vertex(vertex_with_vertex, g)
-gt.save_graph(g)
+		print("Graph file not found")
 
-#g = gt.load_graph_from_file()
+		# Build network
+		g = gt.create_graph(METADATA_NETORK_1, METADATA_NETORK_2, SIMILARITIES)
 
-#print("Load graph")
+		# Save for later
+		gt.save_graph(g)
+
+	else:
+		print("Graph file found")
+
+		gt.load_graph_from_file(UNGRAPH_AMAZON_NETWORK)
+
 
 d = 0
 
@@ -82,6 +84,3 @@ if d == 1:
 #print("\n")
 
 #gc.collect()
-
-if __name__ == "__main__":
-	sys.exit(main())
