@@ -13,31 +13,46 @@ def create_graph(file_1, file_2, similarities):
 
 	#Adding properties
 	vprop_rating = g.new_vertex_property("int")
+	g.vp.rating = vprop_rating
+
 	vprop_categories = g.new_vertex_property("int")
+	g.vp.categories = vprop_categories
+
 	vprop_group = g.new_vertex_property("object")
+	g.vp.group = vprop_group
+
 	eprop_weight = g.new_edge_property("int")
+	g.ep.weight = eprop_weight
 
-	for f in [file_1, file_2]:
+	data = {}
+	s = open(file_1, 'r')
+	a = s.read()
+	d1 = eval(a)
+	s.close()
+	data.update(d1)
 
-		s = open(f, 'r')
-		a = s.read()
-		data = eval(a)
+	s = open(file_2, 'r')
+	a = s.read()
+	d2 = eval(a)
+	s.close()
+	data.update(d2)
 
-		for key in data:
-			print(key)
-			v = g.add_vertex()
-			print(g.vertex_index[v])
-
-			return
+	keys = sorted(data.items())
+	g.add_vertex(548552)
+	for key in keys:
+		try:
+			d = key[1]
+			v = g.vertex(key[0])
 
 			#Set properties
-			vprop_rating[v] = data[key][RATING]
-			vprop_group[v] = data[key][GROUP]
-			vprop_categories[v] = data[key][CATEGORIES]
+			g.vp.rating[v] = d[RATING]
+			g.vp.group[v] = d[GROUP]
+			g.vp.categories[v] = d[CATEGORIES]
+		except:
+			print("Couldn't create vertice ", key[0])
 
-		s.close()
-		del data
-		gc.collect()
+	del data
+	gc.collect()
 
 	sim = open(similarities, 'r').read()
 	sim = eval(sim)
@@ -46,48 +61,27 @@ def create_graph(file_1, file_2, similarities):
 		from_node = key[0]
 		to_node = key[1]
 
-		v1 = g.vertex(from_node)
-		v2 = g.vertex(to_node)
+		try:
+			v1 = g.vertex(from_node)
+			v2 = g.vertex(to_node)
 
-		e = g.add_edge(v1, v2)
-		eprop_weight[e] = sim[key]
-		print("Adicionados vertices %d e %d com peso %d" %(from_node, to_node, sim[key]))
+			e = g.add_edge(v1, v2)
+			d.ep.weight[e] = sim[key]
+			#print("Added vertices %d and %d with weight %d" %(from_node, to_node, sim[key]))
+		except:
+			print("Couldn't find nodes %d and %d" % (from_node, to_node))
 
 	del sim
 	gc.collect()
-			
-
-#	for line in data:
-#		g.add_vertex(2)
-#		if line[0] not in meta or line[1] not in meta:
-#			print("Passei")
-#			continue
-
-#		from_node = int(line[0])
-#		to_node = int(line[1])
-#		v1 = g.vertex(from_node)
-#		v2 = g.vertex(to_node)
-
-#		meta_v1 = meta[line[0]]
-#		meta_v2 = meta[line[1]]
-
-#		vprop_rating[v1] = meta_v1['Rating']
-#		vprop_group[v1] = meta_v1['Group']
-#		vprop_categories[v1] = meta_v1['Categories']
-
-#		vprop_rating[v2] = meta_v2['Rating']
-#		vprop_group[v2] = meta_v2['Group']
-#		vprop_categories[v2] = meta_v2['Categories']
-
-#		e = g.add_edge(v1, v2)
-#		print("Adicionados vertices %d e %d" %(from_node, to_node))
 
 	print("Graph successfully created.")
+	print("  It contains %d vertices and %d edges." % (g.num_vertices(), g.num_edges()))
 	return g
 
 def save_graph(g):
-	g.save('amazon-ungraph.gml')
+	g.save('resource/amazon-ungraph.gml')
+	print("Graph saved in 'resources' folder in file 'amazon-ungraph.gml'.")
 
-def load_graph_from_file():
+def load_graph_from_file(filename):
 	print("Loading graph from file..")
-	return load_graph('resources/amazon-ungraph.gml')
+	return load_graph(filename)

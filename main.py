@@ -6,7 +6,7 @@ import gc, os
 
 # Files paths
 AMAZON_META = 'resources/amazon-meta.txt'
-UNGRAPH_AMAZON_NETWORK = 'resources/com-amazon.ungraph.txt'
+UNGRAPH_AMAZON_NETWORK = 'resources/amazon-ungraph.gml'
 METADATA_NETORK_1 = 'resources/meta-data_1.txt'
 METADATA_NETORK_2 = 'resources/meta-data_2.txt'
 SIMILARITIES = 'resources/similarities-dict.txt'
@@ -52,7 +52,9 @@ if os.path.isfile(METADATA_NETORK_1) and os.path.isfile(METADATA_NETORK_2):
 	else:
 		print("Graph file found")
 
-		gt.load_graph_from_file(UNGRAPH_AMAZON_NETWORK)
+		g = gt.load_graph_from_file(UNGRAPH_AMAZON_NETWORK)
+		print("Graph is ready to go.")
+		print("  It contains %d vertices and %d edges" % (g.num_vertices(), g.num_edges()))
 
 
 d = 0
