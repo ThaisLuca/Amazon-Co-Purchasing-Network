@@ -7,15 +7,15 @@ import gc, os
 # Files paths
 AMAZON_META = 'resources/amazon-meta.txt'
 UNGRAPH_AMAZON_NETWORK = 'resources/amazon-ungraph.gml'
-METADATA_NETORK_1 = 'resources/meta-data_1.txt'
-METADATA_NETORK_2 = 'resources/meta-data_2.txt'
-SIMILARITIES = 'resources/similarities-dict.txt'
+METADATA_NETWORK_1 = 'resources/meta-data_1.txt'
+METADATA_NETWORK_2 = 'resources/meta-data_2.txt'
+NETWORK_FILE = 'resources/com-amazon.ungraph.txt'
 
 gc.collect()
 
 #Pre-processing for meta-data file
 # Check if dictionary of product already exists
-if not os.path.isfile(METADATA_NETORK_1) and not os.path.isfile(METADATA_NETORK_2):
+if not os.path.isfile(METADATA_NETWORK_1) and not os.path.isfile(METADATA_NETWORK_2):
 	print("Metadata files not found")
 
 	# Build dictionary containing products description like category, average rating, categories and group. Indexed by its ID.
@@ -23,19 +23,9 @@ if not os.path.isfile(METADATA_NETORK_1) and not os.path.isfile(METADATA_NETORK_
 	data = dt.remove_not_int_ids(dt.load_metadata_file(AMAZON_META))
 
 	# Save for later
-	dt.save_dict(data, METADATA_NETORK)
+	dt.save_dict(data, METADATA_NETWORK)
 
-
-# Check if dictionary containig relantionship between products already exists
-if not os.path.isfile(SIMILARITIES):
-
-	# Build dictionary measuring relantionship between products
-	sim = dt.get_similar_products(data)
-
-	# Save for later
-	dt.save_dict(sim, SIMILARITIES)
-
-if os.path.isfile(METADATA_NETORK_1) and os.path.isfile(METADATA_NETORK_2):
+if os.path.isfile(METADATA_NETWORK_1) and os.path.isfile(METADATA_NETWORK_2) and os.path.isfile(NETWORK_FILE):
 	print("Metadata files found")
 
 	# Check if ungraph file exists
@@ -43,23 +33,51 @@ if os.path.isfile(METADATA_NETORK_1) and os.path.isfile(METADATA_NETORK_2):
 
 		print("Graph file not found")
 
+		network = dt.load_file(NETWORK_FILE)
+		data = {}
+		s = open(METADATA_NETWORK_1, 'r')
+		a = s.read()
+		d1 = eval(a)
+		s.close()
+		data.update(d1)
+
+		s = open(METADATA_NETWORK_2, 'r')
+		a = s.read()
+		d2 = eval(a)
+		s.close()
+		data.update(d2)
+		del d1
+		del d2
+		gc.collect()
+
 		# Build network
-		g = gt.create_graph(METADATA_NETORK_1, METADATA_NETORK_2, SIMILARITIES)
+		g = gt.create_graph(network, data)
 
 		# Save for later
 		gt.save_graph(g)
 
 	else:
+
 		print("Graph file found")
 
 		g = gt.load_graph_from_file(UNGRAPH_AMAZON_NETWORK)
 		print("Graph is ready to go.")
 		print("  It contains %d vertices and %d edges" % (g.num_vertices(), g.num_edges()))
 
+		vertices = g.vertices()
+		i = 0
+		print("Removing non used vertices.")
+		for v in vertices:
+			if(v.out_degree() == 0):
+				g.remove_vertex(v)
+		print("Vertices with degree zero removed, now your graph contains %d vertices." % g.num_vertices())
+		# Save for later
+		gt.save_graph(g)
+
 
 d = 0
 
-vertices = g.vertices()
+
 if d == 1:
 	degrees = []
 

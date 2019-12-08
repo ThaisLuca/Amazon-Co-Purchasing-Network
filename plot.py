@@ -19,8 +19,8 @@ def plot_distribution(n_vertices, all_measure, xlabel, filename, metric='degree'
 
 def plot_ccdf(n_vertices, all_measure, xlabel, filename, metric='degree'):
     _ccdf = ccdf(n_vertices, all_measure, metric)
-    plot.xscale('log')
-    plot.yscale('log')
+    #plot.xscale('log')
+    #plot.yscale('log')
     plot.ylabel('CCDF')
     plot.xlabel(xlabel)
     plot.plot(range(len(_ccdf)), _ccdf, 'o', clip_on=False)
