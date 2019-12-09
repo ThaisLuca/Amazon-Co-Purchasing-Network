@@ -64,17 +64,6 @@ if os.path.isfile(METADATA_NETWORK_1) and os.path.isfile(METADATA_NETWORK_2) and
 		print("Graph is ready to go.")
 		print("  It contains %d vertices and %d edges" % (g.num_vertices(), g.num_edges()))
 
-		vertices = g.vertices()
-		i = 0
-		print("Removing non used vertices.")
-		for v in vertices:
-			if(v.out_degree() == 0):
-				g.remove_vertex(v)
-		print("Vertices with degree zero removed, now your graph contains %d vertices." % g.num_vertices())
-		# Save for later
-		gt.save_graph(g)
-
-
 d = 0
 
 
