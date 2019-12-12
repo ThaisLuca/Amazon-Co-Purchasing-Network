@@ -1,15 +1,20 @@
+
+from __future__ import division
+
 from graph_tool.all import *
 import data as dt
 import graph as gt
 import plot as plt
+import recommendation as rc
 import gc, os
 
-# Files paths
+# File paths
 AMAZON_META = 'resources/amazon-meta.txt'
 UNGRAPH_AMAZON_NETWORK = 'resources/amazon-ungraph.gml'
 METADATA_NETWORK_1 = 'resources/meta-data_1.txt'
 METADATA_NETWORK_2 = 'resources/meta-data_2.txt'
 NETWORK_FILE = 'resources/com-amazon.ungraph.txt'
+GROUPS_FILE = 'resources/products_groups_by_id.txt'
 
 gc.collect()
 
@@ -64,32 +69,49 @@ if os.path.isfile(METADATA_NETWORK_1) and os.path.isfile(METADATA_NETWORK_2) and
 		print("Graph is ready to go.")
 		print("  It contains %d vertices and %d edges" % (g.num_vertices(), g.num_edges()))
 
+
 d = 0
-
-
 if d == 1:
+
+	print("Density: %3f" % (2*g.num_edges()/(g.num_vertices()*g.num_vertices()-g.num_vertices())))
+
 	degrees = []
 
 	#Find most popular vertex by its degree
 	most_popular = None
 	max_degree = 0
 	sum_degrees = 0
-
+	vertices = g.vertices()
+	
 	for v in vertices:
 		d = v.out_degree()
-		sum_degrees += d 
-		degrees.append(d)
+		if d > 0:
+			sum_degrees += d 
+			degrees.append(d)
 		if d > max_degree:
 			max_degree = d 
 			most_popular = v
 
 	print("Most popular item is %d with degree %d" % (most_popular, max_degree))
 	print("Average degree is %d" % (sum_degrees/g.num_vertices()))
-	#plt.plot_distribution(g.num_vertices(), degrees, "Graus", 'degrees')
 	plt.plot_ccdf(g.num_vertices(), degrees, "Graus", 'degrees')
+	
+	del degrees
+	gc.collect()
 
-#c = global_clustering(g)
-#print("Global Clustering: %f DP: %f " % (c[0], c[1]))
-#print("\n")
+	c = global_clustering(g)
+	print("Global Clustering: %f DP: %f " % (c[0], c[1]))
 
-#gc.collect()
+else:
+	s = open(GROUPS_FILE, 'r')
+	a = s.read()
+	groups = eval(a)
+	s.close()
+
+	product_id = raw_input('Enter a product ID ')
+	rc.recommend(g, product_id, groups)
+	
+
+
+
+

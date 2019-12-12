@@ -4,26 +4,40 @@ from scipy import spatial
 
 # product is the vertex being seen by the user
 # n is the number of products to rank for recommendation
-def recommend(product, n, groups):
-	product_neighboors = product.out_neighboors()
+def recommend(g, product, groups):
+	p_id = product
+	product = g.vertex(product)
+	product_neighbors = product.out_neighbors()
+
+	p_n_ids = []
+	for n in product_neighbors:
+		p_n_ids.append(g.vertex_index[n])
+	pairs = build_pairs(g, p_id, p_n_ids)
+
+
+	# Ranking using Adamic-Adar Similarity
+	adamic_adar_similarities = vertex_similarity(g, vertex_pairs=pairs, sim_type="inv-log-weight")
+
+	ranking = {}
+	for i in range(0, len(pairs)):
+		ranking[pairs[i]] = adamic_adar_similarities[i]
+	
+	#Sort rank
+	r = rank(ranking)
+
+	return
 
 	product_index = g.vertex_index[product]
 	product_rating = g.vp.rating[product]
 	product_group = groups[product_index]
 	product_categories = g.vp.categories[product]
 
-	all_neighboors = []
-	if(len(product_neighboors) < n):
-		all_neighboors = all_neighboors + product_neighboors
-		for v in product_neighboors:
-			all_neighboors = all_neighboors + v.out_neighboors()
-
 	sum_degrees = 0
 	for n in all_neighboors:
 		sum_degrees += n.out_degree()
 
 	ranking = {}
-	for n in all_neighboors:
+	for n in product_neighboors:
 		n_index = g.vertex_index[n]
 		n_degree = product.out_degree()
 		n_rating = g.vp.rating[n]
@@ -43,6 +57,20 @@ def recommend(product, n, groups):
 			c2 = 1
 
 		ranking[n_index] = probability(n_degree, sum_degress)*(1-spatial.distance.cosine([n_rating, g1, c1], [product_rating, g2, c2]))
+
+def build_pairs(g, prod, neighbors):
+	pairs = []
+	for n in neighbors:
+		pairs.append((prod, n))
+	return pairs
+
+
+def rank(d):
+	v = []
+	for i in sorted(d):
+		print(i, d[i])
+		v.append(d[i])
+	return v
 
 
 
