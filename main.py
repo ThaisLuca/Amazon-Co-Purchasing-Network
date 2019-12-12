@@ -16,6 +16,8 @@ METADATA_NETWORK_2 = 'resources/meta-data_2.txt'
 NETWORK_FILE = 'resources/com-amazon.ungraph.txt'
 GROUPS_FILE = 'resources/products_groups_by_id.txt'
 
+with_properties = False
+
 gc.collect()
 
 #Pre-processing for meta-data file
@@ -39,24 +41,29 @@ if os.path.isfile(METADATA_NETWORK_1) and os.path.isfile(METADATA_NETWORK_2) and
 		print("Graph file not found")
 
 		network = dt.load_file(NETWORK_FILE)
-		data = {}
-		s = open(METADATA_NETWORK_1, 'r')
-		a = s.read()
-		d1 = eval(a)
-		s.close()
-		data.update(d1)
+		if(with_properties):
 
-		s = open(METADATA_NETWORK_2, 'r')
-		a = s.read()
-		d2 = eval(a)
-		s.close()
-		data.update(d2)
-		del d1
-		del d2
-		gc.collect()
+			data = {}
+			s = open(METADATA_NETWORK_1, 'r')
+			a = s.read()
+			d1 = eval(a)
+			s.close()
+			data.update(d1)
 
-		# Build network
-		g = gt.create_graph(network, data)
+			s = open(METADATA_NETWORK_2, 'r')
+			a = s.read()
+			d2 = eval(a)
+			s.close()
+			data.update(d2)
+			del d1
+			del d2
+			gc.collect()
+
+			# Build network
+			g = gt.create_graph(network, data)
+		else:
+			# Build network
+			g = gt.create_graph(network, [])
 
 		# Save for later
 		gt.save_graph(g)

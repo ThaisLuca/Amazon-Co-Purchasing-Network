@@ -2,26 +2,29 @@
 from graph_tool.all import *
 import gc
 
-def create_graph(network, data):
-	RATING = 'Rating'
-	GROUP = 'Group'
-	CATEGORIES = 'Categories'
+def create_graph(network, data, with_properties=False):
 
 	print("Creating graph...")
 	g = Graph(directed=False)
 
-	#Adding properties
-	vprop_rating = g.new_vertex_property("int")
-	g.vp.rating = vprop_rating
+	if(with_properties):
 
-	vprop_categories = g.new_vertex_property("int")
-	g.vp.categories = vprop_categories
+		RATING = 'Rating'
+		GROUP = 'Group'
+		CATEGORIES = 'Categories'
 
-	vprop_group = g.new_vertex_property("object")
-	g.vp.group = vprop_group
+		#Adding properties
+		vprop_rating = g.new_vertex_property("int")
+		g.vp.rating = vprop_rating
+
+		vprop_categories = g.new_vertex_property("int")
+		g.vp.categories = vprop_categories
+
+		vprop_group = g.new_vertex_property("object")
+		g.vp.group = vprop_group
 
 
-	g.add_vertex(548552)
+	g.add_vertex(548552) 
 	for line in network:
 		try:
 			from_node = line[0]
@@ -30,15 +33,15 @@ def create_graph(network, data):
 			v1 = g.vertex(from_node)
 			v2 = g.vertex(to_node)
 
+			if(with_properties):
+				#Set properties
+				g.vp.rating[v1] = data[from_node][RATING]
+				g.vp.group[v1] = data[from_node][GROUP]
+				g.vp.categories[v1] = data[from_node][CATEGORIES]
 
-			#Set properties
-			g.vp.rating[v1] = data[from_node][RATING]
-			g.vp.group[v1] = data[from_node][GROUP]
-			g.vp.categories[v1] = data[from_node][CATEGORIES]
-
-			g.vp.rating[v2] = data[to_node][RATING]
-			g.vp.group[v2] = data[to_node][GROUP]
-			g.vp.categories[v2] = data[to_node][CATEGORIES]
+				g.vp.rating[v2] = data[to_node][RATING]
+				g.vp.group[v2] = data[to_node][GROUP]
+				g.vp.categories[v2] = data[to_node][CATEGORIES]
 
 			e = g.add_edge(v1,v2)
 		except:

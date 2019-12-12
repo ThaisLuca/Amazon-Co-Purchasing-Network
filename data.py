@@ -73,6 +73,8 @@ def load_file(filename):
 	print("Reading file...")
 	data = []
 	ignored_lines = 0
+	a = []
+
 	with open(filename) as f:
 		for line in f:
 			if ignored_lines < 4:
@@ -80,6 +82,8 @@ def load_file(filename):
 			else:
 				node = line.split()
 				data.append([node[0], node[1]])
+
+				
 	print("Reading completed.")
 	f.close()
 	return data
