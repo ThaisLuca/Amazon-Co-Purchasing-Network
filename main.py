@@ -1,10 +1,10 @@
 
 from __future__ import division
-
 from graph_tool.all import *
 import data as dt
 import graph as gt
 import plot as plt
+import metrics as m
 import recommendation as rc
 import gc, os
 
@@ -17,6 +17,7 @@ NETWORK_FILE = 'resources/com-amazon.ungraph.txt'
 GROUPS_FILE = 'resources/products_groups_by_id.txt'
 
 with_properties = False
+N = 5
 
 gc.collect()
 
@@ -115,10 +116,19 @@ else:
 	groups = eval(a)
 	s.close()
 
-	product_id = raw_input('Enter a product ID ')
-	rc.recommend(g, product_id, groups)
-	
+	product_id = input('Enter a product ID ')
+	vertice = g.vertex(product_id)
 
+	relevants = []
+	relevant = vertice.out_neighbors()
+	for n in relevant:
+		relevants.append(g.vertex_index[n])
+
+	r_adamic_adar, r_cosine, r_jaccard = rc.recommend(g, product_id, groups, N)
+
+	print("Precision: %3f and Recall %3f for Adamic-Adar Similarity" % m.precision_and_recall(r_adamic_adar[1:], relevants))
+	print("Precision: %3f and Recall %3f for Cosine Similarity" % m.precision_and_recall(r_cosine[1:], relevants))
+	print("Precision: %3f and Recall %3f for Jaccard Similarity" % m.precision_and_recall(r_jaccard[1:], relevants))
 
 
 
