@@ -24,20 +24,32 @@ def recommend(g, p_id, groups, N):
 	for i in range(0, len(pairs)):
 		ranking[pairs[i]] = adamic_adar_similarities[i]
 	
+	print("\n")
 	#Sort rank
 	print("Raking using Adamic-Adar Similarity\n")
 	adamic_adar_recommended = print_rank(ranking, N)
+	print("\n")
 
 	#Ranking using Cosine Similarity
-	cosine_similarities = cossine_vertex_similarity(g, p_id, vertex_pairs=pairs)
+	cosine_similarities, preferencial_similarities = cossine_vertex_similarity(g, p_id, vertex_pairs=pairs)
 
 	ranking = {}
 	for i in range(0, len(pairs)):
-		ranking[pairs[i]] = adamic_adar_similarities[i]
+		ranking[pairs[i]] = cosine_similarities[i]
 	
 	#Sort rank
 	print("Raking using Cossine Similarity\n")
-	cosine_recommended = print_rank(ranking, N)	
+	cosine_recommended = print_rank(ranking, N)
+	print("\n")	
+
+	ranking = {}
+	for i in range(0, len(pairs)):
+		ranking[pairs[i]] = preferencial_similarities[i]
+
+	#Sort rank
+	print("Raking using Preferencial Attachment Index\n")
+	preferencial_recommended = print_rank(ranking, N)
+	print("\n")
 
 	#Ranking using Jaccard Similarity
 	jaccard_similarities = vertex_similarity(g, vertex_pairs=pairs)
@@ -49,8 +61,9 @@ def recommend(g, p_id, groups, N):
 	#Sort rank
 	print("Raking using Jaccard Similarity\n")
 	jaccard_recommended = print_rank(ranking, N)
+	print("\n")
 
-	return adamic_adar_recommended, cosine_recommended, jaccard_recommended
+	return adamic_adar_recommended, cosine_recommended, jaccard_recommended, preferencial_recommended
 
 	ranking = {}
 	for n in product_neighboors:
@@ -105,6 +118,7 @@ def print_rank(d, N):
 
 def cossine_vertex_similarity(g, p_id, vertex_pairs):
 	cossine_similarity = []
+	preferencial_attachment_index = []
 
 	# Computation for product id
 	x_ids = []
@@ -136,10 +150,12 @@ def cossine_vertex_similarity(g, p_id, vertex_pairs):
 		if(dx > 0 and dy > 0):
 			z = math.sqrt(dx)*math.sqrt(dy)
 			cossine_similarity.append(len(neighbors_in_common)/z)
+			preferencial_attachment_index.append(dx*dy)
 		else:
 			cossine_similarity.append(0)
+			preferencial_attachment_index.append(0)
 
-	return cossine_similarity
+	return cossine_similarity, preferencial_attachment_index
 			
 
 
