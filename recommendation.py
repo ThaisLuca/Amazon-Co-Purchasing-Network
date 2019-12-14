@@ -125,20 +125,25 @@ def pearson_correlation(pairs, data):
 	CATEGORIES = 'Categories'
 	x = y =[1,1,1]
 	
+	i = 0
 	for pair in pairs:
 		try:
-			rating_1 = get_rating(data[str(pair[0])][RATING])
-			rating_2 = get_rating(data[str(pair[1])][RATING])
+			#rating_1 = get_rating(data[str(pair[0])][RATING])
+			#rating_2 = get_rating(data[str(pair[1])][RATING])
 
 			group_1 = group_convertion(data[str(pair[0])][GROUP])
 			group_2 = group_convertion(data[str(pair[1])][GROUP])
 
-			x = [rating_1, group_1, int(data[str(pair[0])][CATEGORIES])]
-			y = [rating_2, group_2, int(data[str(pair[1])][CATEGORIES])]
+			x = [group_1, int(data[str(pair[0])][CATEGORIES])]
+			y = [group_2, int(data[str(pair[1])][CATEGORIES])]
+
+			#x = [rating_1, group_1, int(data[str(pair[0])][CATEGORIES])]
+			#y = [rating_2, group_2, int(data[str(pair[1])][CATEGORIES])]
 			p = pearsonr(x,y)
-			correlations[pair] = p
+			correlations[i] = p
 		except:
-			correlations[pair] = 0
+			correlations[i] = (0,0)
+		i += 1
 	return correlations
 
 def cossine_vertex_similarity(g, p_id, vertex_pairs):

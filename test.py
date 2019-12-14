@@ -30,7 +30,7 @@ N_recall_jaccard = []
 N_recall_PA = []
 N_recall_hub = []
 
-p_id = 1
+p_id = 470369
 vertice = g.vertex(p_id)
 
 relevants = []
@@ -44,7 +44,7 @@ for n in g.vertices():
 	p_n_ids.append(_id)
 pairs = rc.build_pairs(p_id, p_n_ids)
 
-properties_based = True
+properties_based = False
 
 if(properties_based):
 	data = {}
@@ -71,29 +71,26 @@ jaccard_similarities = vertex_similarity(g, vertex_pairs=pairs)
 
 if(properties_based):
 
-	for i in correlations:
-		print(i, correlations[i])
-		break
 
 	adamic_adar_ranking = {}
 	for i in range(0, len(pairs)):
-		adamic_adar_ranking[pairs[i]] = adamic_adar_similarities[i] * max(correlations[pairs[i]])
+		adamic_adar_ranking[pairs[i]] = adamic_adar_similarities[i] * max(correlations[i])
 
 	cossine_ranking = {}
 	for i in range(0, len(pairs)):
-		cossine_ranking[pairs[i]] = cosine_similarities[i] * max(correlations[pairs[i]])
+		cossine_ranking[pairs[i]] = cosine_similarities[i] * max(correlations[i])
 
 	jaccard_ranking = {}
 	for i in range(0, len(pairs)):
-		jaccard_ranking[pairs[i]] = jaccard_similarities[i] * max(correlations[pairs[i]])
+		jaccard_ranking[pairs[i]] = jaccard_similarities[i] * max(correlations[i])
 
 	pa_ranking = {}
 	for i in range(0, len(pairs)):
-		pa_ranking[pairs[i]] = preferencial_similarities[i] * max(correlations[pairs[i]])
+		pa_ranking[pairs[i]] = preferencial_similarities[i] * max(correlations[i])
 
 	hub_ranking = {}
 	for i in range(0, len(pairs)):
-		hub_ranking[pairs[i]] = hub_similarities[i] * max(correlations[pairs[i]])
+		hub_ranking[pairs[i]] = hub_similarities[i] * max(correlations[i])
 
 else:
 	adamic_adar_ranking = {}
@@ -218,7 +215,7 @@ print("Precision: %3f and Recall %3f for Adamic-Adar Similarity" % (precision_ad
 print("Precision: %3f and Recall %3f for Cosine Similarity" % (precision_cosine, recall_cosine))
 print("Precision: %3f and Recall %3f for Jaccard Similarity" % (precision_jaccard, recall_jaccard))
 print("Precision: %3f and Recall %3f for Preferencial Attachment Index" % (precision_pa, recall_pa))
-print("Precision: %3f and Recall %3f for Preferencial Attachment Index" % (precision_hub, recall_hub))
+print("Precision: %3f and Recall %3f for Hub Depressed Index" % (precision_hub, recall_hub))
 
 # N = 10
 print("Results for N = 10")
