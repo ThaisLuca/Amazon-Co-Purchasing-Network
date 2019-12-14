@@ -1,4 +1,6 @@
 
+from matplotlib import pyplot as plt
+import numpy as np
 import data as dt
 import os
 
@@ -66,10 +68,49 @@ else:
 	groups = dt.load_dict(GROUP_FILE)
 
 # Plot analysis about rating
-index = np.arange(5)
-plt.bar(index, [ratings['rating_1'], ratings['rating_2'], ratings['rating_3'], ratings['rating_4'], ratings['rating_5']])
-plt.xlabel('Rating', fontsize=5)
-plt.ylabel('No of ratings', fontsize=5)
-plt.xticks(index, label, fontsize=5, rotation=30)
-plt.title('Distribuição das Avalições de Produtos')
+index = [1,2,3,4,5]
+plt.bar(index, [ratings['rating_1'], ratings['rating_2'], ratings['rating_3'], ratings['rating_4'], ratings['rating_5']], alpha=0.6)
+plt.xlabel('Avaliação Média', fontsize=10)
+plt.ylabel('Número de Avaliações', fontsize=10)
+plt.xticks(index, index, fontsize=10)
+plt.title('Distribuição das Avaliações dos Produtos')
+plt.show()
+
+# Plot analysis about groups
+index = list(groups.keys())
+
+numbers_1 = []
+numbers_2 = []
+for i in groups:
+	if i not in ['Book', 'Music', 'DVD', 'Video']:
+		numbers_2.append(groups[i])
+	else:
+		numbers_1.append(groups[i])
+
+plt.bar(index[:4], numbers_1, alpha=0.4)
+plt.ylabel('Número de Produtos por Grupo', fontsize=10)
+plt.xticks([0,1,2,3], index[:4], fontsize=10)
+plt.title('Distribuição dos Produtos por Grupo')
+plt.show()
+
+plt.bar(index[4:], numbers_2, alpha=0.4)
+plt.ylabel('Número de Produtos por Grupo', fontsize=10)
+plt.xticks([0,1,2,3], index[4:], fontsize=10)
+plt.title('Distribuição dos Produtos por Grupo')
+plt.show()
+
+# Plot analysis about categories
+index = list(categories.keys())
+size = 30
+# We have 88 different categories, so we'll plot online the first 30
+numbers = []
+for i in index[:size]:
+	numbers.append(categories[i])
+
+
+plt.bar(index[:size], numbers, alpha=0.4)
+plt.xlabel('Categoria', fontsize=10)
+plt.ylabel('Número de Produtos por Categoria', fontsize=10)
+plt.xticks(index[:size], index[:size], fontsize=7)
+plt.title('Distribuição dos Produtos por Categoria')
 plt.show()
