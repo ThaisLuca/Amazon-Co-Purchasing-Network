@@ -5,9 +5,9 @@ import data as dt
 import os
 
 AMAZON_META = 'resources/amazon-meta.txt'
-CATEGORIES_FILE = 'cat_count.txt'
-GROUP_FILE = 'groups_count.txt'
-RATING_FILE = 'rating_count.txt'
+CATEGORIES_FILE = 'resources/cat_count.txt'
+GROUP_FILE = 'resources/groups_count.txt'
+RATING_FILE = 'resources/rating_count.txt'
 
 RATING='Rating'
 GROUP = 'Group'
