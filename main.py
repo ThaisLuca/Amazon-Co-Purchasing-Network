@@ -124,12 +124,13 @@ else:
 	for n in relevant:
 		relevants.append(g.vertex_index[n])
 
-	r_adamic_adar, r_cosine, r_jaccard, r_preferencial = rc.recommend(g, product_id, groups, N)
+	r_adamic_adar, r_cosine, r_jaccard, r_preferencial, r_hub = rc.recommend(g, product_id, groups, N)
 
 	print("Precision: %3f and Recall %3f for Adamic-Adar Similarity" % m.precision_and_recall(r_adamic_adar[1:], relevants))
 	print("Precision: %3f and Recall %3f for Cosine Similarity" % m.precision_and_recall(r_cosine[1:], relevants))
 	print("Precision: %3f and Recall %3f for Jaccard Similarity" % m.precision_and_recall(r_jaccard[1:], relevants))
 	print("Precision: %3f and Recall %3f for Preferencial Attachment Index" % m.precision_and_recall(r_preferencial[1:], relevants))
+	print("Precision: %3f and Recall %3f for Hub Depressed Index" % m.precision_and_recall(r_hub[1:], relevants))
 
 
 
