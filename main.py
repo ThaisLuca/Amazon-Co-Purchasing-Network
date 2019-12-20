@@ -7,6 +7,7 @@ import plot as plt
 import metrics as m
 import recommendation as rc
 import gc, os
+import numpy as np
 
 # File paths
 AMAZON_META = 'resources/amazon-meta.txt'
@@ -78,7 +79,7 @@ if os.path.isfile(METADATA_NETWORK_1) and os.path.isfile(METADATA_NETWORK_2) and
 		print("  It contains %d vertices and %d edges" % (g.num_vertices(), g.num_edges()))
 
 
-d = 0
+d = 1
 if d == 1:
 
 	print("Density: %3f" % (2*g.num_edges()/(g.num_vertices()*g.num_vertices()-g.num_vertices())))
@@ -90,7 +91,9 @@ if d == 1:
 	max_degree = 0
 	sum_degrees = 0
 	vertices = g.vertices()
-	
+
+	p = {}
+
 	for v in vertices:
 		d = v.out_degree()
 		if d > 0:
@@ -98,7 +101,7 @@ if d == 1:
 			degrees.append(d)
 		if d > max_degree:
 			max_degree = d 
-			most_popular = v
+			most_popular = v	
 
 	print("Most popular item is %d with degree %d" % (most_popular, max_degree))
 	print("Average degree is %d" % (sum_degrees/g.num_vertices()))
@@ -110,7 +113,7 @@ if d == 1:
 	c = global_clustering(g)
 	print("Global Clustering: %f DP: %f " % (c[0], c[1]))
 
-else:
+else:	
 	s = open(GROUPS_FILE, 'r')
 	a = s.read()
 	groups = eval(a)

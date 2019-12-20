@@ -1,4 +1,3 @@
-
 #-*- coding: utf-8 -*-
 
 from __future__ import division
@@ -288,6 +287,5 @@ print("Precision: %3f and Recall %3f for Hub Depressed Index" % (precision_hub, 
 
 plt.plot_curves(N_precision_adamic_adar, N_precision_cosine, N_precision_jaccard, N_precision_PA, N_precision_hub, 'Precisão', 'Top-N Precisão', "upper right")
 plt.plot_curves(N_recall_adamic_adar, N_recall_cosine, N_recall_jaccard, N_recall_PA, N_recall_hub, 'Recall', 'Top-N Recall', "upper left")
-
 
 

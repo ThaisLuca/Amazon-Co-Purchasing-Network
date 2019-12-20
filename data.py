@@ -119,3 +119,37 @@ def load_dict(filename):
 	dt = eval(s)
 	print("Dict loaded.")
 	return dt
+
+def save_to_file(n, adamic_adar, cosine, jaccard, PA, hub, metric):
+
+	with open("results_" + str(metric) + str(n) + ".txt", "w") as f:
+
+		f.write("N = " + str(n) + "\n")
+
+		f.write("Adamic-Adar")
+		f.write(adamic_adar)
+		f.write("\n")
+
+		f.write("Cosine")
+		f.write(cosine)
+		f.write("\n")
+
+		f.write("Jaccard")
+		f.write(jaccard)
+		f.write("\n")
+
+		f.write("PA")
+		f.write(PA)
+		f.write("\n")
+
+		f.write("Hub")
+		f.write(hub)
+
+
+
+
+
+
+
+
+
